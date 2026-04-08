@@ -12,7 +12,7 @@
  * Domain Path:       /languages
  * Requires at least: 5.0
  * Requires PHP:      7.0
- * Requires Plugins:  WooCommerce
+ * Requires Plugins:  woocommerce
  */
 
 // If this file is called directly, abort.
