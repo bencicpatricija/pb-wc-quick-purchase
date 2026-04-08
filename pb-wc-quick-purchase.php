@@ -1,0 +1,21 @@
+<?php
+/**
+ * Plugin Name:       PB WC Quick Purchase
+ * Plugin URI:        https://github.com/bencicpatricija/pb-wc-quick-purchase
+ * Description:       Quick purchase for WooCommerce - bypass the cart and go directly to the checkout.
+ * Version:           1.0.0
+ * Author:            Patricija Benčić
+ * Author URI:        https://github.com/bencicpatricija
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       pb-wc-quick-purchase
+ * Domain Path:       /languages
+ * Requires at least: 5.0
+ * Requires PHP:      7.0
+ * Requires Plugins:  WooCommerce
+ */
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
