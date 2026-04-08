@@ -19,3 +19,5 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
+define( 'PB_WC_QUICK_PURCHASE_VERSION', '1.0.0' );
