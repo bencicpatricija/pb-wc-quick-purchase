@@ -20,4 +20,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// Define plugin constants.
 define( 'PB_WC_QUICK_PURCHASE_VERSION', '1.0.0' );
+define( 'PB_WC_QUICK_PURCHASE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
