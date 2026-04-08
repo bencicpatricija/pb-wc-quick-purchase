@@ -87,3 +87,23 @@ add_action(
   },
   25
 );
+
+/**
+ * This filter runs after WooCommerce has already added the product to the cart.
+ *
+ * @param string $url The URL WooCommerce would normally redirect to.
+ * @return string
+ */
+add_filter(
+  'woocommerce_add_to_cart_redirect',
+  function ( $url ) {
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+    if ( ! empty( $_REQUEST['pb_wcqp_direct'] ) ) {
+      return wc_get_checkout_url();
+    }
+
+    return $url;
+  },
+  10,
+  1
+);
