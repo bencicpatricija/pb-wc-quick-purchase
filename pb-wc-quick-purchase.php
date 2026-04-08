@@ -47,3 +47,43 @@ add_action(
     update_post_meta( $post_id, '_pb_wcqp_enabled', $enabled );
   }
 );
+
+// Output the button after the normal "Add to cart" button.
+add_action(
+  'woocommerce_after_add_to_cart_button',
+  function () {
+    global $product;
+
+    if ( ! $product instanceof WC_Product ) {
+      return;
+    }
+
+    // Only show for simple products.
+    if ( ! $product->is_type( 'simple' ) ) {
+      return;
+    }
+
+    // Respect the admin checkbox.
+    if ( 'yes' !== get_post_meta( $product->get_id(), '_pb_wcqp_enabled', true ) ) {
+      return;
+    }
+
+    // Build the URL: add the product to the cart and redirect straight to checkout.
+    $checkout_url = add_query_arg(
+      [
+        'add-to-cart'    => $product->get_id(),
+        'quantity'       => 1,
+        'pb_wcqp_direct' => '1',
+      ],
+      wc_get_checkout_url()
+    );
+
+    // The button is a plain <a> so it works without JavaScript.
+    printf(
+      '<a href="%s" class="button pb-wcqp-button alt">%s</a>',
+      esc_url( $checkout_url ),
+      esc_html__( 'Quick purchase', 'pb-wc-quick-purchase' )
+    );
+  },
+  25
+);
