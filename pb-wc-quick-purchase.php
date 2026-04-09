@@ -89,21 +89,29 @@ add_action(
 );
 
 /**
- * This filter runs after WooCommerce has already added the product to the cart.
+ * Empty the cart BEFORE WooCommerce adds the new product.
  *
- * @param string $url The URL WooCommerce would normally redirect to.
- * @return string
+ * @param bool $passed      Current validation result from other validators.
+ * @param int  $product_id  Product being added.
+ * @return bool
  */
 add_filter(
-  'woocommerce_add_to_cart_redirect',
-  function ( $url ) {
+  'woocommerce_add_to_cart_validation',
+  function ( $passed, $product_id ) {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    if ( ! empty( $_REQUEST['pb_wcqp_direct'] ) ) {
-      return wc_get_checkout_url();
+    if ( empty( $_REQUEST['pb_wcqp_direct'] ) ) {
+      return $passed;
     }
 
-    return $url;
+    // Only wipe the cart when the product being added has Quick purchase enabled.
+    if ( 'yes' !== get_post_meta( $product_id, '_pb_wcqp_enabled', true ) ) {
+      return $passed;
+    }
+
+    WC()->cart->empty_cart();
+
+    return $passed;
   },
   10,
-  1
+  2
 );
