@@ -24,6 +24,26 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'PB_WC_QUICK_PURCHASE_VERSION', '1.0.0' );
 define( 'PB_WC_QUICK_PURCHASE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
+// Load plugin scripts.
+add_action(
+  'wp_enqueue_scripts',
+  function () {
+    wp_enqueue_script(
+      'pb-wc-quick-purchase',
+      plugins_url( 'scripts.js', __FILE__ ),
+      [],
+      PB_WC_QUICK_PURCHASE_VERSION,
+      true
+    );
+
+    $script_params = [
+      'confirmMessage' => __( 'This will delete all items from your current shopping cart. Do you want to proceed?', 'pb-wc-quick-purchase' ),
+    ];
+
+    wp_localize_script( 'pb-wc-quick-purchase', 'pbWcQuickPurchaseParams', $script_params );
+  }
+);
+
 // Add a checkbox to the product edit page to enable/disable quick purchase for each product.
 add_action(
   'woocommerce_product_options_general_product_data',
