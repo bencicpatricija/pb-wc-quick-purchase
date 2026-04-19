@@ -3,7 +3,7 @@
  * Plugin Name:       PB WooCommerce Quick Purchase
  * Plugin URI:        https://github.com/bencicpatricija/pb-wc-quick-purchase
  * Description:       Quick purchase for WooCommerce - bypass the cart and go directly to the checkout.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            Patricija Benčić
  * Author URI:        https://github.com/bencicpatricija
  * License:           GPL-2.0+
