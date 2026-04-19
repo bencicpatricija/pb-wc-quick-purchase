@@ -17,7 +17,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-	die;
+  die;
 }
 
 // Define plugin constants.
@@ -48,45 +48,44 @@ add_action(
   }
 );
 
-// Output the button after the normal "Add to cart" button.
-add_action(
-  'woocommerce_after_add_to_cart_button',
-  function () {
-    global $product;
+// Output the button after the "Add to cart" button on single product page.
+add_action( 'woocommerce_after_add_to_cart_button', 'pb_wc_display_quick_purchase_button', 25 );
 
-    if ( ! $product instanceof WC_Product ) {
-      return;
-    }
+// Output the button after the "Add to cart" button on product archive pages.
+add_action( 'woocommerce_after_shop_loop_item', 'pb_wc_display_quick_purchase_button', 15 );
 
-    // Only show for simple products.
-    if ( ! $product->is_type( 'simple' ) ) {
-      return;
-    }
+// Display the "Quick purchase" button if enabled for the product.
+function pb_wc_display_quick_purchase_button() {
+  global $product;
 
-    // Respect the admin checkbox.
-    if ( 'yes' !== get_post_meta( $product->get_id(), '_pb_wcqp_enabled', true ) ) {
-      return;
-    }
+  if ( ! $product instanceof WC_Product ) {
+    return;
+  }
 
-    // Build the URL: add the product to the cart and redirect straight to checkout.
-    $checkout_url = add_query_arg(
-      [
-        'add-to-cart'    => $product->get_id(),
-        'quantity'       => 1,
-        'pb_wcqp_direct' => '1',
-      ],
-      wc_get_checkout_url()
-    );
+  // Only show for simple products.
+  if ( ! $product->is_type( 'simple' ) ) {
+    return;
+  }
 
-    // The button is a plain <a> so it works without JavaScript.
-    printf(
-      '<a href="%s" class="button pb-wcqp-button alt">%s</a>',
-      esc_url( $checkout_url ),
-      esc_html__( 'Quick purchase', 'pb-wc-quick-purchase' )
-    );
-  },
-  25
-);
+  if ( 'yes' !== get_post_meta( $product->get_id(), '_pb_wcqp_enabled', true ) ) {
+    return;
+  }
+
+  $checkout_url = add_query_arg(
+    [
+      'add-to-cart'    => $product->get_id(),
+      'quantity'       => 1,
+      'pb_wcqp_direct' => '1',
+    ],
+    wc_get_checkout_url()
+  );
+
+  return printf(
+    '<a href="%s" class="button pb-wcqp-button alt">%s</a>',
+    esc_url( $checkout_url ),
+    esc_html__( 'Quick purchase', 'pb-wc-quick-purchase' )
+  );
+}
 
 /**
  * Empty the cart BEFORE WooCommerce adds the new product.
@@ -103,7 +102,6 @@ add_filter(
       return $passed;
     }
 
-    // Only wipe the cart when the product being added has Quick purchase enabled.
     if ( 'yes' !== get_post_meta( $product_id, '_pb_wcqp_enabled', true ) ) {
       return $passed;
     }
